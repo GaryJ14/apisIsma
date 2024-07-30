@@ -153,7 +153,7 @@
         function traerDatos() {
             $.ajax({
                 type: "GET",
-                url: "http://18.188.147.218:3000/api/customers", // URL de ejemplo de la API
+                url: "http://18.118.205.9:3000/api/customers", // URL de ejemplo de la API
                 success: function(data) {
                     var cuerpoTable = $("#cuerpoTable");
                     cuerpoTable.empty(); // Limpiar la tabla antes de agregar nuevos datos
@@ -190,7 +190,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "http://18.188.147.218:3000/api/customers", // URL para agregar datos
+                url: "http://18.118.205.9:3000/api/customers", // URL para agregar datos
                 data: JSON.stringify({
                     name: nombre,
                     email: email,
