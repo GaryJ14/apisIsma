@@ -54,7 +54,7 @@
         <div class="row">
             <div class="col-md-12 banner">
                 <img src="https://destapando100es.wordpress.com/wp-content/uploads/2013/01/banners231.jpg" alt="ERROR">
-                <h1>Listado de Proveedores</h1>
+                <h1>Listado de Facturas</h1>
             </div>
             <!-- Full screen modal -->
             <!-- Button trigger modal -->
@@ -63,7 +63,7 @@
     <div class="container">
         <br><br><br>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            Agregar Proveedor
+            Agregar Factura
         </button>
         
         <!-- Modal -->
@@ -71,7 +71,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Nuevo Proveedor</h1>
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Nueva Factura</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -80,30 +80,18 @@
                                 <div class="col-md-2"></div>
                                 <div class="col-md-8">
                                     <!-- Formulario para agregar datos -->
-                                    <form id="formularioProveedor" method="post">
+                                    <form id="formularioFactura" method="post">
                                         <div class="mb-3">
-                                            <label for="id_proveedor" class="form-label">ID Proveedor</label>
-                                            <input type="text" class="form-control" id="id_proveedor" name="id_proveedor" required>
+                                            <label for="id_factura" class="form-label">ID Factura</label>
+                                            <input type="text" class="form-control" id="id_factura" name="id_factura" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="nombre" class="form-label">Nombre</label>
-                                            <input type="text" class="form-control" id="nombre" name="nombre" required>
+                                            <label for="fecha_emision" class="form-label">Fecha de Emisión</label>
+                                            <input type="date" class="form-control" id="fecha_emision" name="fecha_emision" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="apellido" class="form-label">Apellido</label>
-                                            <input type="text" class="form-control" id="apellido" name="apellido" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="telefono" class="form-label">Teléfono</label>
-                                            <input type="text" class="form-control" id="telefono" name="telefono" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="direccion" class="form-label">Dirección</label>
-                                            <input type="text" class="form-control" id="direccion" name="direccion" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="mail" class="form-label">Email</label>
-                                            <input type="email" class="form-control" id="mail" name="mail" required>
+                                            <label for="monto_total" class="form-label">Monto Total</label>
+                                            <input type="number" class="form-control" id="monto_total" name="monto_total" required>
                                         </div>
                                     </form>
                                 </div>
@@ -112,20 +100,17 @@
                     </div>
                     <div class="modal-footer">
                         <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" form="formularioProveedor" class="btn btn-primary">Agregar Proveedor</button>
+                        <button type="submit" form="formularioFactura" class="btn btn-primary">Agregar Factura</button>
                     </div>
                 </div>
             </div>
         </div>
         <br><br>
-        <table class="table" id="tbl-proveedor">
+        <table class="table" id="tbl-factura">
             <thead class="table-danger">
-                <td>ID Proveedor</td>
-                <td>Nombre</td>
-                <td>Apellido</td>
-                <td>Teléfono</td>
-                <td>Dirección</td>
-                <td>Email</td>
+                <td>ID Factura</td>
+                <td>Fecha de Emisión</td>
+                <td>Monto Total</td>
             </thead>
             <tbody id="cuerpoTable">
                 
@@ -134,7 +119,7 @@
     </div>
     <br>
     <script>
-        let table = new DataTable('#tbl-proveedor');
+        let table = new DataTable('#tbl-factura');
     </script>
     <script>
         var messages = [
@@ -157,18 +142,15 @@
         function traerDatos() {
             $.ajax({
                 type: "GET",
-                url: "http://18.188.147.218:3000/api/proveedores", // URL de ejemplo de la API
+                url: "http://18.188.147.218:3000/api/facturas", // URL de ejemplo de la API
                 success: function(data) {
                     var cuerpoTable = $("#cuerpoTable");
                     cuerpoTable.empty(); // Limpiar la tabla antes de agregar nuevos datos
-                    data.forEach(function(provider) {
+                    data.forEach(function(invoice) {
                         var fila = `<tr>
-                                        <td>${provider.id_proveedor}</td>
-                                        <td>${provider.nombre}</td>
-                                        <td>${provider.apellido}</td>
-                                        <td>${provider.telefono}</td>
-                                        <td>${provider.direccion}</td>
-                                        <td>${provider.mail}</td>
+                                        <td>${invoice.id_factura}</td>
+                                        <td>${invoice.fecha_emision}</td>
+                                        <td>${invoice.monto_total}</td>
                                     </tr>`;
                         cuerpoTable.append(fila);
                     });
@@ -181,42 +163,33 @@
             });
         }
 
-        $("#formularioProveedor").submit(function(event) {
+        $("#formularioFactura").submit(function(event) {
             event.preventDefault(); // Evitar el comportamiento por defecto del formulario
 
-            var id_proveedor = $("#id_proveedor").val();
-            var nombre = $("#nombre").val();
-            var apellido = $("#apellido").val();
-            var telefono = $("#telefono").val();
-            var direccion = $("#direccion").val();
-            var mail = $("#mail").val();
+            var id_factura = $("#id_factura").val();
+            var fecha_emision = $("#fecha_emision").val();
+            var monto_total = parseFloat($("#monto_total").val());
 
             console.log("Datos a enviar:", {
-                id_proveedor: id_proveedor,
-                nombre: nombre,
-                apellido: apellido,
-                telefono: telefono,
-                direccion: direccion,
-                mail: mail
+                id_factura: id_factura,
+                fecha_emision: fecha_emision,
+                monto_total: monto_total
             });
 
             $.ajax({
                 type: "POST",
-                url: "http://18.188.147.218:3000/api/proveedores", // URL para agregar datos
+                url: "http://18.188.147.218:3000/api/facturas", // URL para agregar datos
                 data: JSON.stringify({
-                    id_proveedor: id_proveedor,
-                    nombre: nombre,
-                    apellido: apellido,
-                    telefono: telefono,
-                    direccion: direccion,
-                    mail: mail
+                    id_factura: id_factura,
+                    fecha_emision: fecha_emision,
+                    monto_total: monto_total
                 }),
                 contentType: "application/json; charset=utf-8",
                 success: function(response) {
                     $("#staticBackdrop").modal('hide'); // Cerrar el modal
-                    alert("Proveedor agregado con éxito");
-                    traerDatos(); // Actualizar la tabla después de agregar un proveedor
-                    $("#formularioProveedor")[0].reset(); // Limpiar el formulario
+                    alert("Factura agregada con éxito");
+                    traerDatos(); // Actualizar la tabla después de agregar una factura
+                    $("#formularioFactura")[0].reset(); // Limpiar el formulario
                 },
                 error: function(xhr, status, error) {
                     console.error("Error al agregar", status, error);

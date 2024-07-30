@@ -44,7 +44,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
-            <a class="nav-item nav-link active" href="index.html">Inicio </span></a>
+            <a class="nav-item nav-link active" href="index.html">Inicio </a>
             <a class="nav-item nav-link" href="clientes.html">Clientes</a>
             <a class="nav-item nav-link" href="Proveedor.html">Proveedor</a>
             <a class="nav-item nav-link" href="Producto.html">Productos</a>
@@ -57,7 +57,7 @@
         <div class="row">
             <div class="col-md-12 banner">
                 <img src="https://destapando100es.wordpress.com/wp-content/uploads/2013/01/banners231.jpg" alt="ERROR">
-                <h1>Listado de Clientes</h1>
+                <h1>Listado de Productos</h1>
             </div>
                 <!-- Full screen modal -->
                 <!-- Button trigger modal -->
@@ -66,7 +66,7 @@
             <div class="container">
                 <br><br><br>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                Agregar Cliente
+                Agregar Producto
                 </button>
             
                 <!-- Modal -->
@@ -74,7 +74,7 @@
                     <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Nuevo Cliente</h1>
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Nuevo Producto</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -83,20 +83,35 @@
                                     <div class="col-md-2"></div>
                                     <div class="col-md-8">
                                         <!-- Formulario para agregar datos -->
-                                        <form id="formularioCliente" method="post">
+                                        <form id="formularioProducto" method="post">
                                             <div class="mb-3">
                                                 <label for="nombre" class="form-label">Nombre</label>
                                                 <input type="text" class="form-control" id="nombre" name="nombre" required>
                                             </div>
                                             <div class="mb-3">
-                                                <label for="email" class="form-label">Email</label>
-                                                <input type="email" class="form-control" id="email" name="email" required>
+                                                <label for="descripcion" class="form-label">Descripción</label>
+                                                <input type="text" class="form-control" id="descripcion" name="descripcion" required>
                                             </div>
                                             <div class="mb-3">
-                                                <label for="edad" class="form-label">Edad</label>
-                                                <input type="number" class="form-control" id="edad" name="edad" required>
+                                                <label for="categoria" class="form-label">Categoría</label>
+                                                <input type="text" class="form-control" id="categoria" name="categoria" required>
                                             </div>
-                                            
+                                            <div class="mb-3">
+                                                <label for="precio" class="form-label">Precio</label>
+                                                <input type="number" class="form-control" id="precio" name="precio" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="cantidad_inventario" class="form-label">Cantidad en Inventario</label>
+                                                <input type="number" class="form-control" id="cantidad_inventario" name="cantidad_inventario" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="proveedor" class="form-label">Proveedor</label>
+                                                <input type="text" class="form-control" id="proveedor" name="proveedor" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="fecha_adquisicion" class="form-label">Fecha de Adquisición</label>
+                                                <input type="date" class="form-control" id="fecha_adquisicion" name="fecha_adquisicion" required>
+                                            </div>
                                         </form>
                                     </div>
                                 </div>
@@ -104,19 +119,23 @@
                         </div>
                         <div class="modal-footer">
                         <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" form="formularioCliente" class="btn btn-primary">Agregar Cliente</button>
+                        <button type="submit" form="formularioProducto" class="btn btn-primary">Agregar Producto</button>
                         
                         </div>
                     </div>
                     </div>
                 </div>
                 <br><br>
-                <table class="table" id="tbl-cliente">
+                <table class="table" id="tbl-producto">
                     <thead class="table-danger">
                       <td>ID</td>
                       <td>Nombre</td>
-                      <td>Email</td>
-                      <td>Edad</td>
+                      <td>Descripción</td>
+                      <td>Categoría</td>
+                      <td>Precio</td>
+                      <td>Cantidad en Inventario</td>
+                      <td>Proveedor</td>
+                      <td>Fecha de Adquisición</td>
                     </thead>
                     <tbody id="cuerpoTable">
                       
@@ -130,7 +149,7 @@
     </div>
     <br>
     <script>
-        let table = new DataTable('#tbl-cliente');
+        let table = new DataTable('#tbl-producto');
     </script>
     <script>
         var messages = [
@@ -153,16 +172,20 @@
         function traerDatos() {
             $.ajax({
                 type: "GET",
-                url: "http://18.188.147.218:3000/api/customers", // URL de ejemplo de la API
+                url: "http://18.188.147.218:3000/api/productos", // URL de ejemplo de la API
                 success: function(data) {
                     var cuerpoTable = $("#cuerpoTable");
                     cuerpoTable.empty(); // Limpiar la tabla antes de agregar nuevos datos
-                    data.forEach(function(customer) {
+                    data.forEach(function(product) {
                         var fila = `<tr>
-                                        <td>${customer.id}</td>
-                                        <td>${customer.name}</td>
-                                        <td>${customer.email}</td>
-                                        <td>${customer.age || 'N/A'}</td> 
+                                        <td>${product.id_producto}</td>
+                                        <td>${product.nombre}</td>
+                                        <td>${product.descripcion}</td>
+                                        <td>${product.categoria}</td>
+                                        <td>${product.precio}</td>
+                                        <td>${product.cantidad_nventario}</td>
+                                        <td>${product.id_proveedor}</td>
+                                        <td>${product.fecha_adquisicion}</td>
                                     </tr>`;
                         cuerpoTable.append(fila);
                     });
@@ -175,33 +198,45 @@
             });
         }
 
-        $("#formularioCliente").submit(function(event) {
+        $("#formularioProducto").submit(function(event) {
             event.preventDefault(); // Evitar el comportamiento por defecto del formulario
 
             var nombre = $("#nombre").val();
-            var email = $("#email").val();
-            var edad = parseInt($("#edad").val());
+            var descripcion = $("#descripcion").val();
+            var categoria = $("#categoria").val();
+            var precio = parseFloat($("#precio").val());
+            var cantidad_inventario = parseInt($("#cantidad_inventario").val());
+            var proveedor = $("#proveedor").val();
+            var fecha_adquisicion = $("#fecha_adquisicion").val();
 
             console.log("Datos a enviar:", {
-                name: nombre,
-                email: email,
-                age: edad
+                nombre: nombre,
+                descripcion: descripcion,
+                categoria: categoria,
+                precio: precio,
+                cantidad_inventario: cantidad_inventario,
+                proveedor: proveedor,
+                fecha_adquisicion: fecha_adquisicion
             });
 
             $.ajax({
                 type: "POST",
-                url: "http://18.188.147.218:3000/api/customers", // URL para agregar datos
+                url: "http://18.188.147.218:3000/api/productos", // URL para agregar datos
                 data: JSON.stringify({
-                    name: nombre,
-                    email: email,
-                    age: edad
+                    nombre: nombre,
+                    descripcion: descripcion,
+                    categoria: categoria,
+                    precio: precio,
+                    cantidad_inventario: cantidad_inventario,
+                    proveedor: proveedor,
+                    fecha_adquisicion: fecha_adquisicion
                 }),
                 contentType: "application/json; charset=utf-8",
                 success: function(response) {
                     $("#staticBackdrop").modal('hide'); // Cerrar el modal
-                    alert("Cliente agregado con éxito");
-                    traerDatos(); // Actualizar la tabla después de agregar un cliente
-                    $("#formularioCliente")[0].reset(); // Limpiar el formulario
+                    alert("Producto agregado con éxito");
+                    traerDatos(); // Actualizar la tabla después de agregar un producto
+                    $("#formularioProducto")[0].reset(); // Limpiar el formulario
                 },
                 error: function(xhr, status, error) {
                     console.error("Error al agregar", status, error);
@@ -215,9 +250,5 @@
             traerDatos();
         });
     </script>
-
-    
-
-
-    
 </body>
+</html>
